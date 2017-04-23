@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<p th:unless="${fighters} and ${fighters.size()}">No Fighters Have Been Added</p>
+
+
+<table class="table">
+
+    <tr>
+        <th>Name</th>
+        <th>Image</th>
+    </tr>
+
+    <tr th:each="fighter : ${fighters}">
+        <td th:text="${fighter.name}"></td>
+        <td>
+            <img th:src="${fighter.picUrl}" alt="???"/>
+        </td>
+    </tr>
+
+</table>
+
+<a href="/fighter/add">Add Another Fighter</a>
+
+</body>
+</html>
