@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -55,4 +52,55 @@ public class FighterController {
         fighterDao.save(newFighter);
         return "redirect:";
     }
+
+    @RequestMapping(value = "remove", method = RequestMethod.GET)
+    public String displayRemoveFighterForm(Model model) {
+
+        model.addAttribute("fighters", fighterDao.findAll());
+        model.addAttribute("title", "Delete Fighter?");
+
+        return "fighter/remove";
+    }
+
+    @RequestMapping(value = "remove", method = RequestMethod.POST)
+    public String processRemoveFighterForm(@RequestParam int[] fighterIds) {
+
+        for (int fighterId : fighterIds) {
+            fighterDao.delete(fighterId);
+        }
+
+        return "redirect:";
+    }
+
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+    public String displayEditFighterForm(@PathVariable int id, Model model) {
+
+        Fighter oldFighter = fighterDao.findOne(id);
+
+        model.addAttribute("fighter", new Fighter());
+        model.addAttribute("oldFighter", oldFighter);
+        model.addAttribute("title", oldFighter.getName());
+
+        return "fighter/edit";
+    }
+
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
+    public String processEditFighterForm(Model model,
+                                         @ModelAttribute @Valid Fighter fighter,
+                                         Errors errors) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("fighter", fighter);
+//            model.addAttribute("title", fighter.getName());
+            return "fighter/edit";
+        }
+
+        Fighter theFighter = fighterDao.findOne(fighter.getId());
+        theFighter.setName(fighter.getName());
+        theFighter.setPicUrl(fighter.getPicUrl());
+        fighterDao.save(theFighter);
+
+        return "redirect:fighter/edit/" + fighter.getId();
+    }
+
 }

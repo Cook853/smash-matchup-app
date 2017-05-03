@@ -3,6 +3,7 @@ package org.launchcode.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,13 +17,14 @@ public class Fighter {
     @GeneratedValue
     private int id;
 
+    @OneToMany
+    @JoinColumn(name = "fighter_id")
+    private List<Matchup> matchups = new ArrayList<>();
+
     private String picUrl;
 
-    @NotNull
+    @NotNull(message="Must have a name")
     private String name;
-
-//    @OneToMany
-//    private int matchupValue;
 
     public Fighter(String picUrl, String name) {
         this.picUrl = picUrl;
@@ -53,9 +55,9 @@ public class Fighter {
         this.name = name;
     }
 
-//    public int getMatchupValue() {
-//        return matchupValue;
-//    }
+    public List<Matchup> getMatchups() {
+        return matchups;
+    }
 }
 
 

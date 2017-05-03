@@ -23,11 +23,16 @@
         <td>
             <img th:src="${fighter.picUrl}" alt="???"/>
         </td>
+        <td><a th:href="'/fighter/edit/' + ${fighter.id}">Update Fighter</a>
+        </td>
+        <td><a th:href="'/matchups/' + ${fighter.id}">Edit Matchups</a>
+        </td>
     </tr>
 
 </table>
 
-<a href="/fighter/add">Add Another Fighter</a>
+<a href="/fighter/add">Add Another Fighter</a> |
+<a href="/fighter/remove">Delete a Fighter</a>
 
 </body>
 </html>

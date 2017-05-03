@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<form method="post" style="max-width:600px;" th:object="${matchup}">
+    <div class="form-group">
+        <label th:for="fighterTwo">Name</label>
+        <select name="fighterId">
+            <option th:each="fighter : ${fighters}"
+                    th:text="${fighter.name}"
+                    th:value="${fighter.id}"></option>
+        </select>
+        <label th:for="fighterOneMatchup">Matchup</label>
+        <select name="fighterOneMatchup">
+            <option value="1">-4</option>
+            <option value="2">-3</option>
+            <option value="3">-2</option>
+            <option value="4">-1</option>
+            <option value="5">Even</option>
+            <option value="6">+1</option>
+            <option value="7">+2</option>
+            <option value="8">+3</option>
+            <option value="9">+4</option>
+        </select>
+    </div>
+
+    <input type="submit" value="Add Matchup" />
+</form>
+
+</body>
+</html>
