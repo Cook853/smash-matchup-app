@@ -8,14 +8,14 @@
 
 <form method="post" style="max-width:600px;" th:object="${matchup}">
     <div class="form-group">
-        <label th:for="fighterTwo">Name</label>
-        <select name="fighterId">
+        <label th:for="opponentId">Name</label>
+        <select name="opponentId">
             <option th:each="fighter : ${fighters}"
                     th:text="${fighter.name}"
                     th:value="${fighter.id}"></option>
         </select>
-        <label th:for="fighterOneMatchup">Matchup</label>
-        <select name="fighterOneMatchup">
+        <label th:for="fighterMatchupValue">Matchup</label>
+        <select name="fighterMatchupValue">
             <option value="1">-4</option>
             <option value="2">-3</option>
             <option value="3">-2</option>

@@ -16,14 +16,11 @@ public class Matchup {
     private int id;
 
     @ManyToOne
-    private Fighter fighterOne;
+    private Fighter fighter;
 
-    private int fighterOneMatchup;
+    private int fighterMatchupValue;
 
-    @ManyToOne
-    private Fighter fighterTwo;
-
-    private int fighterTwoMatchup;
+    private int opponentId;
 
     public Matchup() {
 
@@ -41,35 +38,27 @@ public class Matchup {
         return id;
     }
 
-    public Fighter getFighterOne() {
-        return fighterOne;
+    public Fighter getfighter() {
+        return fighter;
     }
 
-    public void setFighterOne(Fighter fighterOne) {
-        this.fighterOne = fighterOne;
+    public void setFighter(Fighter fighter) {
+        this.fighter = fighter;
     }
 
-    public int getFighterOneMatchup() {
-        return fighterOneMatchup;
+    public int getFighterMatchupValue() {
+        return fighterMatchupValue;
     }
 
-    public void setFighterOneMatchup(int fighterOneMatchup) {
-        this.fighterOneMatchup = fighterOneMatchup;
+    public void setFighterMatchupValue(int fighterMatchupValue) {
+        this.fighterMatchupValue = fighterMatchupValue;
     }
 
-    public Fighter getFighterTwo() {
-        return fighterTwo;
+    public int getOpponentId() {
+        return opponentId;
     }
 
-    public void setFighterTwo(Fighter fighterTwo) {
-        this.fighterTwo = fighterTwo;
-    }
-
-    public int getFighterTwoMatchup() {
-        return fighterTwoMatchup;
-    }
-
-    public void setFighterTwoMatchup(int fighterTwoMatchup) {
-        this.fighterTwoMatchup = fighterTwoMatchup;
+    public void setOpponentId(int opponentId) {
+        this.opponentId = opponentId;
     }
 }

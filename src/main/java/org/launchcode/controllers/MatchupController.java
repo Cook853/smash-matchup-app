@@ -36,30 +36,50 @@ public class MatchupController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public String processAddMatchupForm(Model model,
-                                        @ModelAttribute Matchup newMatchup,
-                                        @RequestParam int fighterId,
-                                        @RequestParam int fighterOneMatchup,
+                                        @ModelAttribute Matchup newFighterMatchup,
+                                        @RequestParam int opponentId,
+                                        @RequestParam int fighterMatchupValue,
                                         @PathVariable int id) {
 
-        int fighterTwoMatchup = 0;
-        Fighter fighterOne = fighterDao.findOne(id);
-        Fighter fighterTwo = fighterDao.findOne(fighterId);
-        newMatchup.setFighterTwo(fighterTwo);
-        newMatchup.setFighterOne(fighterOne);
-        newMatchup.setFighterOneMatchup(fighterOneMatchup);
-        if (fighterOneMatchup == 5) {
-            fighterTwoMatchup = 5;
+        int opponentMatchupValue = 0;
+        Fighter fighter = fighterDao.findOne(id);
+        Fighter opponent = fighterDao.findOne(opponentId);
+
+        switch(fighterMatchupValue) {
+            case 1 : opponentMatchupValue = 9;
+                break;
+            case 2 : opponentMatchupValue = 8;
+                break;
+            case 3 : opponentMatchupValue = 7;
+                break;
+            case 4 : opponentMatchupValue = 6;
+                break;
+            case 5 : opponentMatchupValue = 5;
+                break;
+            case 6 : opponentMatchupValue = 4;
+                break;
+            case 7 : opponentMatchupValue = 3;
+                break;
+            case 8 : opponentMatchupValue = 2;
+                break;
+            case 9 : opponentMatchupValue = 1;
+                break;
         }
 
-        if (fighterOneMatchup == 6) {
-            fighterTwoMatchup = 4;
-        }
+        newFighterMatchup.setFighter(fighter);
+        newFighterMatchup.setOpponentId(opponentId);
+        newFighterMatchup.setFighterMatchupValue(fighterMatchupValue);
 
-        newMatchup.setFighterTwoMatchup(fighterTwoMatchup);
-        newMatchup.setFighter(fighterOne);
+        matchupDao.save(newFighterMatchup);
 
-        matchupDao.save(newMatchup);
-        return "redirect:fighter";
+        Matchup newOpponentMatchup = new Matchup();
+        newOpponentMatchup.setFighter(opponent);
+        newOpponentMatchup.setFighterMatchupValue(opponentMatchupValue);
+        newOpponentMatchup.setOpponentId(fighter.getId());
+
+        matchupDao.save(newOpponentMatchup);
+
+        return "redirect:../fighter";
     }
 
 }
