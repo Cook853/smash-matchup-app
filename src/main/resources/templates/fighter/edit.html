@@ -10,13 +10,13 @@
     <div class="form-group">
         <label th:for="name">Name</label>
         <input class="form-control" th:field="*{name}"
-               th:value="${oldFighter.name}" />
+               th:text="${oldFighter.name}" />
         <span th:errors="*{name}" class="error"></span>
     </div>
     <div class="form-group">
-        <label th:for="picUrl">Picture</label>
-        <input class="form-control" th:field="*{picUrl}"
-               th:value="${oldFighter.picUrl}" />
+        <img th:src="${oldFighter.picUrl}" alt="???" />
+        <label th:for="picUrl">Old Picture</label>
+        <input class="form-control" th:field="*{picUrl}" />
         <span th:errors="*{picUrl}" class="error"></span>
     </div>
 

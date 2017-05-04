@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<p th:unless="${opponents} and ${opponents.size()}">No Matchups Have Been Added</p>
+
+<div>
+    <img th:src="${fighter.picUrl}" alt="???" />
+</div>
+
+<table class="table">
+
+    <tr>
+        <th>Opponent</th>
+        <th>Matchup</th>
+    </tr>
+
+    <tr th:each="opponent : ${opponents}">
+        <td>
+            <img th:src="${opponent.key}" alt="???" />
+        </td>
+        <td th:text="${opponent.value}"></td>
+    </tr>
+
+</table>
 
 </body>
 </html>

@@ -2,7 +2,7 @@ package org.launchcode.controllers;
 
 import org.launchcode.models.Fighter;
 import org.launchcode.models.data.FighterDao;
-//import org.launchcode.models.data.MatchupDao;
+import org.launchcode.models.data.MatchupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +21,8 @@ public class FighterController {
     @Autowired
     FighterDao fighterDao;
 
-//    @Autowired
-//    MatchupDao matchupDao;
+    @Autowired
+    MatchupDao matchupDao;
 
     @RequestMapping(value = "")
     public String index(Model model) {
@@ -86,14 +86,7 @@ public class FighterController {
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
     public String processEditFighterForm(Model model,
-                                         @ModelAttribute @Valid Fighter fighter,
-                                         Errors errors) {
-
-        if (errors.hasErrors()) {
-            model.addAttribute("fighter", fighter);
-//            model.addAttribute("title", fighter.getName());
-            return "fighter/edit";
-        }
+                                         @ModelAttribute Fighter fighter) {
 
         Fighter theFighter = fighterDao.findOne(fighter.getId());
         theFighter.setName(fighter.getName());

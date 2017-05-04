@@ -6,14 +6,21 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
+<span th:if="${matchupExistsError != null}" th:text="${matchupExistsError}"></span>
+
 <form method="post" style="max-width:600px;" th:object="${matchup}">
     <div class="form-group">
         <label th:for="opponentId">Name</label>
         <select name="opponentId">
             <option th:each="fighter : ${fighters}"
                     th:text="${fighter.name}"
-                    th:value="${fighter.id}"></option>
+                    th:value="${fighter.id}">
+            </option>
         </select>
+        <span th:if="${opponentError}" th:text="${opponentError}"></span>
+    </div>
+
+    <div>
         <label th:for="fighterMatchupValue">Matchup</label>
         <select name="fighterMatchupValue">
             <option value="1">-4</option>
@@ -26,6 +33,7 @@
             <option value="8">+3</option>
             <option value="9">+4</option>
         </select>
+        <span th:if="${dittoError}" th:text="${dittoError}"></span>
     </div>
 
     <input type="submit" value="Add Matchup" />

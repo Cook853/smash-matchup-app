@@ -25,14 +25,6 @@ public class Matchup {
     public Matchup() {
 
     }
-//
-//    public Matchup(Fighter fighterOne, int fighterOneMatchup,
-//                   Fighter fighterTwo, int fighterTwoMatchup) {
-//        this.fighterOne = fighterOne;
-//        this.fighterOneMatchup = fighterOneMatchup;
-//        this.fighterTwo = fighterTwo;
-//        this.fighterTwoMatchup = fighterTwoMatchup;
-//    }
 
     public int getId() {
         return id;
