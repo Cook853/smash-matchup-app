@@ -1,6 +1,7 @@
 package org.launchcode.controllers;
 
 import org.launchcode.models.Fighter;
+import org.launchcode.models.Matchup;
 import org.launchcode.models.data.FighterDao;
 import org.launchcode.models.data.MatchupDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ public class FighterController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "New Fighter");
+            model.addAttribute("fighter", new Fighter());
             return "fighter/add";
         }
 
@@ -66,6 +68,11 @@ public class FighterController {
     public String processRemoveFighterForm(@RequestParam int[] fighterIds) {
 
         for (int fighterId : fighterIds) {
+            for (Matchup matchup : matchupDao.findAll()) {
+                if (fighterId == matchup.getFighter().getId() || fighterId == matchup.getOpponentId()) {
+                    matchupDao.delete(matchup.getId());
+                }
+            }
             fighterDao.delete(fighterId);
         }
 
@@ -77,23 +84,32 @@ public class FighterController {
 
         Fighter oldFighter = fighterDao.findOne(id);
 
-        model.addAttribute("fighter", new Fighter());
         model.addAttribute("oldFighter", oldFighter);
+        model.addAttribute("editedFighter", new Fighter());
         model.addAttribute("title", oldFighter.getName());
 
         return "fighter/edit";
     }
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
-    public String processEditFighterForm(Model model,
-                                         @ModelAttribute Fighter fighter) {
+    public String processEditFighterForm(@ModelAttribute @Valid Fighter editedFighter,
+                                         Errors errors, Model model,
+                                         @PathVariable int id) {
 
-        Fighter theFighter = fighterDao.findOne(fighter.getId());
-        theFighter.setName(fighter.getName());
-        theFighter.setPicUrl(fighter.getPicUrl());
-        fighterDao.save(theFighter);
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "New Fighter");
+            return "fighter/edit";
+        }
 
-        return "redirect:fighter/edit/" + fighter.getId();
+        Fighter oldFighter = fighterDao.findOne(id);
+        oldFighter.setName(editedFighter.getName());
+        oldFighter.setPicUrl(editedFighter.getPicUrl());
+        fighterDao.save(oldFighter);
+
+        model.addAttribute("success", "Fighter successfully updated");
+        model.addAttribute("editedFighter", new Fighter());
+
+        return "redirect:/fighter/edit/{id}";
     }
 
 }
