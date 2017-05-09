@@ -9,9 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Lauren on 4/18/2017.
@@ -61,16 +60,19 @@ public class MatchupController {
         Fighter opponent = fighterDao.findOne(opponentId);
 
         for (Matchup matchup : allMatchups) {
-            Fighter matchupFighter = matchup.getfighter();
+            Fighter matchupFighter = matchup.getFighter();
             if (fighter.equals(matchupFighter)) {
                 if (matchup.getOpponentId() == opponentId) {
-                    String matchupExistsError = "You've already set this matchup!";
-                    model.addAttribute("matchupExistsError", matchupExistsError);
-                    model.addAttribute("title", "Add Matchup");
-                    model.addAttribute("matchup", new Matchup());
-                    model.addAttribute("fighters", fighterDao.findAll());
 
-                    return "matchup/add";
+                    matchupDao.delete(matchup.getId());
+
+                    for (Matchup opponentMatchup : allMatchups) {
+                        if (opponentMatchup.getFighter().getId() == opponentId) {
+                            if (opponentMatchup.getOpponentId() == matchupFighter.getId()) {
+                                matchupDao.delete(opponentMatchup.getId());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -136,7 +138,7 @@ public class MatchupController {
 
         for (Matchup matchup : matchups) {
             if (matchup.getOpponentId() == thisFighter.getId()) {
-                Fighter aMatchupOpponent = matchup.getfighter();
+                Fighter aMatchupOpponent = matchup.getFighter();
                 String matchupString = "";
 
                 switch(matchup.getFighterMatchupValue()) {
@@ -170,6 +172,5 @@ public class MatchupController {
 
         return "matchup/view";
     }
-
 
 }

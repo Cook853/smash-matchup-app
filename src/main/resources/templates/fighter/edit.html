@@ -6,7 +6,9 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<form method="post" style="max-width:600px;" th:object="${fighter}">
+<p th:if="${success}" th:text="${success}">Success!</p>
+
+<form method="post" style="max-width:600px;" th:object="${editedFighter}">
     <div class="form-group">
         <label th:for="name">Name</label>
         <input class="form-control" th:field="*{name}"
@@ -14,12 +16,11 @@
         <span th:errors="*{name}" class="error"></span>
     </div>
     <div class="form-group">
-        <img th:src="${oldFighter.picUrl}" alt="???" />
         <label th:for="picUrl">Old Picture</label>
+        <img th:src="${oldFighter.picUrl}" alt="???" />
         <input class="form-control" th:field="*{picUrl}" />
         <span th:errors="*{picUrl}" class="error"></span>
     </div>
-
     <input type="submit" value="Update Fighter" />
 </form>
 

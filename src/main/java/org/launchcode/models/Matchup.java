@@ -30,7 +30,7 @@ public class Matchup {
         return id;
     }
 
-    public Fighter getfighter() {
+    public Fighter getFighter() {
         return fighter;
     }
 
