@@ -20,7 +20,7 @@
     <form th:action="@{/calculator}" method="post">
         <tr th:each="fighter : ${fighters}">
             <td>
-                <input type="checkbox" th:name="aFighter" th:value="${fighter.id}" />
+                <input type="checkbox" th:name="userFighters" th:for="${userFighters}" th:value="${fighter.id}" />
                 <label>
                     <img th:src="${fighter.picUrl}" alt="???" />
                 </label>

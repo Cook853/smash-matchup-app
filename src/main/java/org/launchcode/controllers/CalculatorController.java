@@ -34,20 +34,20 @@ public class CalculatorController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String displayChooseFighterForm(Model model) {
 
+        ArrayList<Fighter> userFighters = new ArrayList<>();
         model.addAttribute("fighters", fighterDao.findAll());
         model.addAttribute("title", "Matchup Help");
+        model.addAttribute("userFighters", userFighters);
 
         return "calculator/index";
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String processChooseFighterForm(Model model,
-                                           @RequestParam int aFighter,
+                                           @RequestParam ArrayList<Fighter> userFighters,
                                            @RequestParam int opponentFighterId) {
 
         Fighter opponentFighter = fighterDao.findOne(opponentFighterId);
-        ArrayList<Fighter> userFighters = new ArrayList<>();
-        userFighters.add(fighterDao.findOne(aFighter));
 
         Calculator calculator = new Calculator(userFighters,
                 opponentFighter, matchupDao.findAll());
