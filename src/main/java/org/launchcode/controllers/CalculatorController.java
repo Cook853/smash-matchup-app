@@ -52,7 +52,7 @@ public class CalculatorController {
         Calculator calculator = new Calculator(userFighters,
                 opponentFighter, matchupDao.findAll());
 
-        Matchup bestMatchup = calculator.getBestMatchup();
+        Matchup bestMatchup = matchupDao.findOne(calculator.getBestMatchupId());
         Fighter bestFighter = bestMatchup.getFighter();
         String matchupValue = "";
 
@@ -90,6 +90,7 @@ public class CalculatorController {
 
         model.addAttribute("matchupMessage", matchupMessage);
         model.addAttribute("bestFighter", bestFighter);
+        model.addAttribute("bestMatchup", bestMatchup);
 
         return "calculator/results";
     }

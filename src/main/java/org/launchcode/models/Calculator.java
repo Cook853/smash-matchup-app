@@ -27,7 +27,7 @@ public class Calculator {
 
         for (Fighter aFighter : userFighters) {
             for (Matchup aMatchup : allMatchups){
-                if (aMatchup.getFighter().equals(aFighter)) {
+                if (aMatchup.getFighter().getId() == aFighter.getId()) {
                     if (aMatchup.getOpponentId() == opponentFighter.getId()) {
                         userFighterMatchups.add(aMatchup);
                     }
@@ -36,20 +36,21 @@ public class Calculator {
         }
     }
 
-    public Matchup getBestMatchup() {
+    public int getBestMatchupId() {
 
-        Matchup finalBestMatchup = new Matchup();
-        userFighterMatchups = getUserFighterMatchups();
-        Integer bestMatchupValue = 0;
+        ArrayList<Matchup> userFighterMatchups = getUserFighterMatchups();
+        int bestMatchupValue = userFighterMatchups.get(0).getFighterMatchupValue();
+//        int bestMatchupValue = 0;
+        int finalBestMatchupId = userFighterMatchups.get(0).getId();
 
         for (Matchup aMatchup : userFighterMatchups) {
-            if (aMatchup.getFighterMatchupValue() > bestMatchupValue) {
+            if (aMatchup.getFighterMatchupValue() >= bestMatchupValue) {
                 bestMatchupValue = aMatchup.getFighterMatchupValue();
-                finalBestMatchup.setFighterMatchupValue(aMatchup.getFighterMatchupValue());
-                finalBestMatchup.setFighter(aMatchup.getFighter());
+                finalBestMatchupId = aMatchup.getId();
             }
         }
-        return finalBestMatchup;
+
+        return finalBestMatchupId;
     }
 
     public ArrayList<Fighter> getUserFighters() {
