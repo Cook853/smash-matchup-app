@@ -98,7 +98,7 @@ public class FighterController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "New Fighter");
-            return "fighter/edit";
+            return "fighter/add";
         }
 
         Fighter oldFighter = fighterDao.findOne(id);
