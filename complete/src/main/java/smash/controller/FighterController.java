@@ -1,22 +1,22 @@
-package org.launchcode.controllers;
+package smash.controller;
 
-import org.launchcode.models.Fighter;
-import org.launchcode.models.Matchup;
-import org.launchcode.models.data.FighterDao;
-import org.launchcode.models.data.MatchupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import smash.data.FighterDao;
+import smash.data.MatchupDao;
+import smash.model.Fighter;
+import smash.model.Matchup;
 
 import javax.validation.Valid;
 
 /**
- * Created by Lauren on 4/18/2017.
+ * Created by Lauren on 5/15/2017.
  */
 @Controller
-@RequestMapping("fighter")
+@RequestMapping("user/fighters")
 public class FighterController {
 
     @Autowired
@@ -109,7 +109,7 @@ public class FighterController {
         model.addAttribute("success", "Fighter successfully updated");
         model.addAttribute("editedFighter", new Fighter());
 
-        return "redirect:/fighter/edit/{id}";
+        return "redirect:user/fighters/edit/{id}";
     }
 
 }

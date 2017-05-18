@@ -1,4 +1,4 @@
-package org.launchcode.models;
+package smash.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * Created by Lauren on 4/18/2017.
+ * Created by Lauren on 5/15/2017.
  */
 @Entity
 public class Matchup {
