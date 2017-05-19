@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<span th:if="${logoutMessage != null}" th:text="${logoutMessage}"></span>
+
+<span th:if="${userError != null}" th:text="${userError}"></span>
+
+<p th:if="${loginError != null}" class="error">Need both a username and a password</p>
+<p th:if="${userNotFound != null}" th:text="${userNotFound}" class="error"></p>
+
+<form method="post">
+    <label for="username">Username</label>:
+    <input type="text" id="username" th:value="${username}" name="username" /> <br />
+    <label for="password">Password</label>:
+    <input type="password" id="password" name="password" /> <br />
+    <input type="submit" value="Log in" />
+</form>
+</body>
+</html>

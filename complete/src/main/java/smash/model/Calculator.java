@@ -1,11 +1,9 @@
-package org.launchcode.models;
+package smash.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
- * Created by Lauren on 5/4/2017.
+ * Created by Lauren on 5/15/2017.
  */
 public class Calculator {
 

@@ -1,22 +1,21 @@
-package org.launchcode.controllers;
+package smash.controller;
 
-import org.launchcode.models.Fighter;
-import org.launchcode.models.Matchup;
-import org.launchcode.models.data.FighterDao;
-import org.launchcode.models.data.MatchupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import smash.data.FighterDao;
+import smash.data.MatchupDao;
+import smash.model.*;
 
 import javax.validation.Valid;
 
 /**
- * Created by Lauren on 4/18/2017.
+ * Created by Lauren on 5/15/2017.
  */
 @Controller
-@RequestMapping("fighter")
+@RequestMapping("user/fighters")
 public class FighterController {
 
     @Autowired
@@ -25,19 +24,35 @@ public class FighterController {
     @Autowired
     MatchupDao matchupDao;
 
+    LoggedIn loggedIn = new LoggedIn();
+    CurrentUser currentUser = new CurrentUser();
+
     @RequestMapping(value = "")
     public String index(Model model) {
 
+        if (!loggedIn.isNowLoggedIn()) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("fighters", fighterDao.findAll());
         model.addAttribute("title", "Fighters");
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
 
         return "fighter/index";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddFighterForm(Model model) {
+
+        if (!loggedIn.isNowLoggedIn()) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("title", "New Fighter");
         model.addAttribute("fighter", new Fighter());
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
         return "fighter/add";
     }
 
@@ -58,6 +73,12 @@ public class FighterController {
     @RequestMapping(value = "remove", method = RequestMethod.GET)
     public String displayRemoveFighterForm(Model model) {
 
+        if (!loggedIn.isNowLoggedIn()) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("fighters", fighterDao.findAll());
         model.addAttribute("title", "Delete Fighter?");
 
@@ -82,11 +103,17 @@ public class FighterController {
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String displayEditFighterForm(@PathVariable int id, Model model) {
 
+        if (!loggedIn.isNowLoggedIn()) {
+            return "redirect:/login";
+        }
+
         Fighter oldFighter = fighterDao.findOne(id);
 
         model.addAttribute("oldFighter", oldFighter);
         model.addAttribute("editedFighter", new Fighter());
         model.addAttribute("title", oldFighter.getName());
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
 
         return "fighter/edit";
     }
@@ -98,7 +125,7 @@ public class FighterController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "New Fighter");
-            return "fighter/add";
+            return "fighter/edit";
         }
 
         Fighter oldFighter = fighterDao.findOne(id);
@@ -109,7 +136,7 @@ public class FighterController {
         model.addAttribute("success", "Fighter successfully updated");
         model.addAttribute("editedFighter", new Fighter());
 
-        return "redirect:/fighter/edit/{id}";
+        return "redirect:user/fighters/edit/{id}";
     }
 
 }

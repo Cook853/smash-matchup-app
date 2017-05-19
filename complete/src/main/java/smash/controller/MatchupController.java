@@ -1,22 +1,23 @@
-package org.launchcode.controllers;
+package smash.controller;
 
-import org.launchcode.models.Fighter;
-import org.launchcode.models.Matchup;
-import org.launchcode.models.data.FighterDao;
-import org.launchcode.models.data.MatchupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import smash.data.FighterDao;
+import smash.data.MatchupDao;
+import smash.model.CurrentUser;
+import smash.model.Fighter;
+import smash.model.LoggedIn;
+import smash.model.Matchup;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by Lauren on 4/18/2017.
+ * Created by Lauren on 5/15/2017.
  */
 @Controller
-@RequestMapping(value = "matchups")
+@RequestMapping(value = "user/matchups")
 public class MatchupController {
 
     @Autowired
@@ -25,12 +26,17 @@ public class MatchupController {
     @Autowired
     FighterDao fighterDao;
 
+    LoggedIn loggedIn = new LoggedIn();
+    CurrentUser currentUser = new CurrentUser();
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String displayAddMatchupForm(Model model) {
 
         model.addAttribute("title", "Add Matchup");
         model.addAttribute("matchup", new Matchup());
         model.addAttribute("fighters", fighterDao.findAll());
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
 
         return "matchup/add";
     }
@@ -125,7 +131,7 @@ public class MatchupController {
             matchupDao.save(newOpponentMatchup);
         }
 
-        return "redirect:../fighter";
+        return "redirect:..user/fighters";
     }
 
     @RequestMapping(value = "/{id}/view")
@@ -169,6 +175,8 @@ public class MatchupController {
         model.addAttribute("opponents", opponents);
         model.addAttribute("fighter", thisFighter);
         model.addAttribute("title", "Matchups");
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
 
         return "matchup/view";
     }

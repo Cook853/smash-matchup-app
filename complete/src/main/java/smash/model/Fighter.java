@@ -1,14 +1,12 @@
-package org.launchcode.models;
+package smash.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Lauren on 4/18/2017.
+ * Created by Lauren on 5/15/2017.
  */
 @Entity
 public class Fighter {
@@ -59,5 +57,3 @@ public class Fighter {
         return matchups;
     }
 }
-
-
