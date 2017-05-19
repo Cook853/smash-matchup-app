@@ -12,10 +12,12 @@ import javax.validation.constraints.Size;
 public class User {
 
     @NotNull
-    @Size(min=5, max=15)
+    @Size(min=4, max=15)
     private String username;
 
     private String password;
+
+    private String salt;
 
     @Id
     @GeneratedValue
@@ -28,12 +30,20 @@ public class User {
 
     }
 
-    public void setPassword(String unhashedPassword) {
-        this.password = unhashedPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public int getId() {

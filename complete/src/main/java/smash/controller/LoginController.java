@@ -6,10 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import smash.data.UserDao;
-import smash.model.CurrentUser;
-import smash.model.LoggedIn;
-import smash.model.Role;
-import smash.model.User;
+import smash.model.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -60,7 +57,9 @@ public class LoginController {
 
         for (User user : users) {
             if (user.getUsername().equals(username)) {
-                if (user.getPassword().equals(password)) {
+                String salt = user.getSalt();
+                String checkHashed = BCrypt.hashpw(password, salt);
+                if (user.getPassword().equals(checkHashed)) {
                     loggedIn.setNowLoggedIn(true);
                     currentUser.setCurrentUserId(user.getId());
                     model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
@@ -119,7 +118,10 @@ public class LoginController {
             return "signup";
         } else {
             user.setUsername(username);
-            user.setPassword(unHashedPassword);
+            String salt = BCrypt.gensalt();
+            user.setSalt(salt);
+            String hashedPassword = BCrypt.hashpw(unHashedPassword, salt);
+            user.setPassword(hashedPassword);
             user.setRole(Role.USER);
             userDao.save(user);
 
