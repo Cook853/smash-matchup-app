@@ -8,8 +8,11 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<p th:unless="${fighters} and ${fighters.size()}">No Fighters Have Been Added</p>
+<span th:if="${loggedInError != null}" th:text="${loggedInError}" class="error"></span>
 
+<span th:if="${mustLogOutError != null}" th:text="${mustLogOutError}" class="error"></span>
+
+<p th:unless="${fighters} and ${fighters.size()}">No Fighters Have Been Added</p>
 
 <table class="table">
 

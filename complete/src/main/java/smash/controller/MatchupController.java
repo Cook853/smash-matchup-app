@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import smash.data.FighterDao;
 import smash.data.MatchupDao;
+import smash.model.CurrentUser;
 import smash.model.Fighter;
+import smash.model.LoggedIn;
 import smash.model.Matchup;
 
 import java.util.HashMap;
@@ -24,12 +26,17 @@ public class MatchupController {
     @Autowired
     FighterDao fighterDao;
 
+    LoggedIn loggedIn = new LoggedIn();
+    CurrentUser currentUser = new CurrentUser();
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String displayAddMatchupForm(Model model) {
 
         model.addAttribute("title", "Add Matchup");
         model.addAttribute("matchup", new Matchup());
         model.addAttribute("fighters", fighterDao.findAll());
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
 
         return "matchup/add";
     }
@@ -168,6 +175,8 @@ public class MatchupController {
         model.addAttribute("opponents", opponents);
         model.addAttribute("fighter", thisFighter);
         model.addAttribute("title", "Matchups");
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
 
         return "matchup/view";
     }

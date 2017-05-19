@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import smash.data.FighterDao;
 import smash.data.MatchupDao;
-import smash.model.Calculator;
-import smash.model.Fighter;
-import smash.model.Matchup;
+import smash.model.*;
 
 import java.util.ArrayList;
 
@@ -27,13 +25,22 @@ public class CalculatorController {
     @Autowired
     MatchupDao matchupDao;
 
+    LoggedIn loggedIn = new LoggedIn();
+    CurrentUser currentUser = new CurrentUser();
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String displayChooseFighterForm(Model model) {
+
+        if (!loggedIn.isNowLoggedIn()) {
+            return "redirect:/login";
+        }
 
         ArrayList<Fighter> userFighters = new ArrayList<>();
         model.addAttribute("fighters", fighterDao.findAll());
         model.addAttribute("title", "Matchup Help");
         model.addAttribute("userFighters", userFighters);
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
 
         return "calculator/index";
     }
@@ -87,6 +94,8 @@ public class CalculatorController {
         model.addAttribute("matchupMessage", matchupMessage);
         model.addAttribute("bestFighter", bestFighter);
         model.addAttribute("bestMatchup", bestMatchup);
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+        model.addAttribute("currentUser", currentUser);
 
         return "calculator/results";
     }
