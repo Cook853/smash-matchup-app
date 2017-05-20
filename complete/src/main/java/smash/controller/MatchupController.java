@@ -6,12 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import smash.data.FighterDao;
 import smash.data.MatchupDao;
+import smash.data.UserDao;
 import smash.model.CurrentUser;
 import smash.model.Fighter;
 import smash.model.LoggedIn;
 import smash.model.Matchup;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Lauren on 5/15/2017.
@@ -26,17 +28,24 @@ public class MatchupController {
     @Autowired
     FighterDao fighterDao;
 
+    @Autowired
+    UserDao userDao;
+
     LoggedIn loggedIn = new LoggedIn();
     CurrentUser currentUser = new CurrentUser();
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String displayAddMatchupForm(Model model) {
 
+        if (!loggedIn.isNowLoggedIn()) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("title", "Add Matchup");
         model.addAttribute("matchup", new Matchup());
-        model.addAttribute("fighters", fighterDao.findAll());
+        model.addAttribute("fighters", userDao.findOne(currentUser.getCurrentUserId()).getFighters());
         model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
-        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
 
         return "matchup/add";
     }
@@ -54,12 +63,14 @@ public class MatchupController {
             model.addAttribute("opponentError", opponentError);
             model.addAttribute("title", "Add Matchup");
             model.addAttribute("matchup", new Matchup());
-            model.addAttribute("fighters", fighterDao.findAll());
+            model.addAttribute("fighters", userDao.findOne(currentUser.getCurrentUserId()).getFighters());
+            model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
+            model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
 
             return "matchup/add";
         }
 
-        Iterable<Matchup> allMatchups = matchupDao.findAll();
+        List<Matchup> allMatchups = userDao.findOne(currentUser.getCurrentUserId()).getAllMatchups();
 
         int opponentMatchupValue = 0;
         Fighter fighter = fighterDao.findOne(id);
@@ -90,6 +101,8 @@ public class MatchupController {
                 model.addAttribute("title", "Add Matchup");
                 model.addAttribute("matchup", new Matchup());
                 model.addAttribute("fighters", fighterDao.findAll());
+                model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+                model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
 
                 return "matchup/add";
             }
@@ -119,6 +132,7 @@ public class MatchupController {
         newFighterMatchup.setFighter(fighter);
         newFighterMatchup.setOpponentId(opponentId);
         newFighterMatchup.setFighterMatchupValue(fighterMatchupValue);
+        newFighterMatchup.setUser(userDao.findOne(currentUser.getCurrentUserId()));
 
         matchupDao.save(newFighterMatchup);
 
@@ -127,6 +141,7 @@ public class MatchupController {
             newOpponentMatchup.setFighter(opponent);
             newOpponentMatchup.setFighterMatchupValue(opponentMatchupValue);
             newOpponentMatchup.setOpponentId(fighter.getId());
+            newOpponentMatchup.setUser(userDao.findOne(currentUser.getCurrentUserId()));
 
             matchupDao.save(newOpponentMatchup);
         }
@@ -136,6 +151,10 @@ public class MatchupController {
 
     @RequestMapping(value = "/{id}/view")
     public String displayMatchups(Model model, @PathVariable int id) {
+
+        if (!loggedIn.isNowLoggedIn()) {
+            return "redirect:/login";
+        }
 
         Fighter thisFighter = fighterDao.findOne(id);
 
@@ -176,7 +195,7 @@ public class MatchupController {
         model.addAttribute("fighter", thisFighter);
         model.addAttribute("title", "Matchups");
         model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
-        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
 
         return "matchup/view";
     }

@@ -15,6 +15,9 @@ public class Fighter {
     @GeneratedValue
     private int id;
 
+    @ManyToOne
+    private User user;
+
     @OneToMany
     @JoinColumn(name = "fighter_id")
     private List<Matchup> matchups = new ArrayList<>();
@@ -35,6 +38,14 @@ public class Fighter {
 
     public int getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getPicUrl() {

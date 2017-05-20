@@ -7,9 +7,11 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import smash.data.FighterDao;
 import smash.data.MatchupDao;
+import smash.data.UserDao;
 import smash.model.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by Lauren on 5/15/2017.
@@ -24,6 +26,9 @@ public class FighterController {
     @Autowired
     MatchupDao matchupDao;
 
+    @Autowired
+    UserDao userDao;
+
     LoggedIn loggedIn = new LoggedIn();
     CurrentUser currentUser = new CurrentUser();
 
@@ -34,10 +39,10 @@ public class FighterController {
             return "redirect:/login";
         }
 
-        model.addAttribute("fighters", fighterDao.findAll());
+        model.addAttribute("fighters", userDao.findOne(currentUser.getCurrentUserId()).getFighters());
         model.addAttribute("title", "Fighters");
         model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
-        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
 
         return "fighter/index";
     }
@@ -49,7 +54,7 @@ public class FighterController {
             return "redirect:/login";
         }
 
-        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
         model.addAttribute("title", "New Fighter");
         model.addAttribute("fighter", new Fighter());
         model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
@@ -63,11 +68,27 @@ public class FighterController {
         if (errors.hasErrors()) {
             model.addAttribute("title", "New Fighter");
             model.addAttribute("fighter", new Fighter());
+            model.addAttribute("errors", errors);
+            model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
+            model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
             return "fighter/add";
         }
 
+        List<Fighter> currentUserFighters = userDao.findOne(currentUser.getCurrentUserId()).getFighters();
+        for (Fighter fighter : currentUserFighters) {
+            if (newFighter.getName().equals(fighter.getName())) {
+                model.addAttribute("title", "New Fighter");
+                model.addAttribute("fighter", new Fighter());
+                model.addAttribute("fighterExistsError", "You've already added that fighter");
+                model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
+                model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
+                return "fighter/add";
+            }
+        }
+
+        newFighter.setUser(userDao.findOne(currentUser.getCurrentUserId()));
         fighterDao.save(newFighter);
-        return "redirect:";
+        return "redirect:../fighters";
     }
 
     @RequestMapping(value = "remove", method = RequestMethod.GET)
@@ -78,8 +99,8 @@ public class FighterController {
         }
 
         model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("fighters", fighterDao.findAll());
+        model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
+        model.addAttribute("fighters", userDao.findOne(currentUser.getCurrentUserId()).getFighters());
         model.addAttribute("title", "Delete Fighter?");
 
         return "fighter/remove";
@@ -97,7 +118,7 @@ public class FighterController {
             fighterDao.delete(fighterId);
         }
 
-        return "redirect:";
+        return "redirect:../fighters";
     }
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
@@ -113,7 +134,7 @@ public class FighterController {
         model.addAttribute("editedFighter", new Fighter());
         model.addAttribute("title", oldFighter.getName());
         model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
-        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
 
         return "fighter/edit";
     }
@@ -125,6 +146,8 @@ public class FighterController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "New Fighter");
+            model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
+            model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
             return "fighter/edit";
         }
 
@@ -133,10 +156,14 @@ public class FighterController {
         oldFighter.setPicUrl(editedFighter.getPicUrl());
         fighterDao.save(oldFighter);
 
+        model.addAttribute("oldFighter", oldFighter);
+        model.addAttribute("title", oldFighter.getName());
         model.addAttribute("success", "Fighter successfully updated");
         model.addAttribute("editedFighter", new Fighter());
+        model.addAttribute("currentUser", userDao.findOne(currentUser.getCurrentUserId()));
+        model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
 
-        return "redirect:user/fighters/edit/{id}";
+        return "fighter/edit";
     }
 
 }

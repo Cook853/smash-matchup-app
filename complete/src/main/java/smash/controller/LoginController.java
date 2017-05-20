@@ -87,7 +87,7 @@ public class LoginController {
             model.addAttribute("currentUser", currentUser);
             model.addAttribute("loggedIn", loggedIn.isNowLoggedIn());
             model.addAttribute("mustLogOutError", "You must log out before making a new account");
-            return "user/fighters";
+            return "redirect:user/fighters";
         }
 
         User user = new User();

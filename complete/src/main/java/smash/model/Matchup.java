@@ -16,6 +16,9 @@ public class Matchup {
     private int id;
 
     @ManyToOne
+    private User user;
+
+    @ManyToOne
     private Fighter fighter;
 
     private int fighterMatchupValue;
@@ -36,6 +39,14 @@ public class Matchup {
 
     public void setFighter(Fighter fighter) {
         this.fighter = fighter;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getFighterMatchupValue() {
