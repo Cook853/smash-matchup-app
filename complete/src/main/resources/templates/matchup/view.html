@@ -11,7 +11,7 @@
 <p th:unless="${opponents} and ${opponents.size()}">No Matchups Have Been Added</p>
 
 <div>
-    <img th:src="${fighter.picUrl}" alt="???" />
+    <img th:src="${fighter.picUrl}" alt="???" class="img-thumbnail" />
 </div>
 
 <table class="table">
@@ -23,7 +23,7 @@
 
     <tr th:each="opponent : ${opponents}">
         <td>
-            <img th:src="${opponent.key}" alt="???" />
+            <img th:src="${opponent.key}" alt="???" class="img-thumbnail" />
         </td>
         <td th:text="${opponent.value}"></td>
     </tr>

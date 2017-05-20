@@ -24,7 +24,7 @@
     <tr th:each="fighter : ${fighters}">
         <td th:text="${fighter.name}"></td>
         <td>
-            <img th:src="${fighter.picUrl}" alt="???"/>
+            <img th:src="${fighter.picUrl}" alt="???" class="img-thumbnail" />
         </td>
         <td><a th:href="'fighters/edit/' + ${fighter.id}">Update Fighter</a>
         </td>
