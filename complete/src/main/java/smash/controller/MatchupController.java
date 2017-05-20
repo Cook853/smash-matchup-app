@@ -146,7 +146,7 @@ public class MatchupController {
             matchupDao.save(newOpponentMatchup);
         }
 
-        return "redirect:..user/fighters";
+        return "redirect:../fighters";
     }
 
     @RequestMapping(value = "/{id}/view")
