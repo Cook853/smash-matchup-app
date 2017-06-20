@@ -12,7 +12,9 @@
     <div th:each="fighter : ${fighters}" class="checkbox">
         <input type="checkbox" name="fighterIds" th:value="${fighter.id}"
                th:id="${fighter.id}"/>
-        <label th:for="${fighter.id}" th:text="${fighter.name}"></label>
+        <label>
+            <img th:src="${fighter.picUrl}" alt="???" class="img-thumbnail" width="70px" />
+        </label>
         <br />
     </div>
 

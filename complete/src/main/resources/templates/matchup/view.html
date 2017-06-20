@@ -23,7 +23,7 @@
 
     <tr th:each="opponent : ${opponents}">
         <td>
-            <img th:src="${opponent.key}" alt="???" class="img-thumbnail" />
+            <img th:src="${opponent.key}" alt="???" class="img-thumbnail" width="70px" />
         </td>
         <td th:text="${opponent.value}"></td>
     </tr>

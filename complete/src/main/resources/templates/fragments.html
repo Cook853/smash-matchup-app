@@ -10,13 +10,15 @@
 </head>
 <body>
 
-<nav th:fragment="navigation">
-    <a href="../">Home</a> |
+<nav th:fragment="navigation" th:if="${loggedIn == false}">
+    <a href="/signup">Create Account</a> |
+    <a href="/login">Login</a>
+</nav>
+
+<nav th:fragment="navigation" th:if="${loggedIn == true}">
     <a href="/user/fighters">Fighters</a> |
     <a href="/user/calculator">Matchup Help</a> |
-    <a href="../signup">Create Account</a> |
-    <a href="../login" th:if="${loggedIn == false}">Login</a>
-    <a href="../logout" th:if="${loggedIn == true}">Logout</a>
+    <a href="/logout">Logout</a>
 </nav>
 
 </body>
